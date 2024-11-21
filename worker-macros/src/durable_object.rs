@@ -91,7 +91,7 @@ pub fn expand_macro(tokens: TokenStream) -> syn::Result<TokenStream> {
                                 // to the durable object escape into a static-lifetime future.
                                 let static_self: &'static mut Self = unsafe {&mut *(self as *mut _)};
 
-                                wasm_bindgen_futures::future_to_promise(async move {
+                                ::worker::wasm_bindgen_futures::future_to_promise(async move {
                                     static_self._fetch_raw(req.into()).await.map(worker::worker_sys::web_sys::Response::from).map(wasm_bindgen::JsValue::from)
                                         .map_err(wasm_bindgen::JsValue::from)
                                 })
@@ -118,7 +118,7 @@ pub fn expand_macro(tokens: TokenStream) -> syn::Result<TokenStream> {
                                 // to the durable object escape into a static-lifetime future.
                                 let static_self: &'static mut Self = unsafe {&mut *(self as *mut _)};
 
-                                wasm_bindgen_futures::future_to_promise(async move {
+                                ::worker::wasm_bindgen_futures::future_to_promise(async move {
                                     static_self._alarm_raw().await.map(worker::worker_sys::web_sys::Response::from).map(wasm_bindgen::JsValue::from)
                                         .map_err(wasm_bindgen::JsValue::from)
                                 })
@@ -152,7 +152,7 @@ pub fn expand_macro(tokens: TokenStream) -> syn::Result<TokenStream> {
                                 // to the durable object escape into a static-lifetime future.
                                 let static_self: &'static mut Self = unsafe {&mut *(self as *mut _)};
 
-                                wasm_bindgen_futures::future_to_promise(async move {
+                                ::worker::wasm_bindgen_futures::future_to_promise(async move {
                                     static_self._websocket_message_raw(ws.into(), ws_message).await.map(|_| wasm_bindgen::JsValue::NULL)
                                         .map_err(wasm_bindgen::JsValue::from)
                                 })
@@ -179,7 +179,7 @@ pub fn expand_macro(tokens: TokenStream) -> syn::Result<TokenStream> {
                                 // to the durable object escape into a static-lifetime future.
                                 let static_self: &'static mut Self = unsafe {&mut *(self as *mut _)};
 
-                                wasm_bindgen_futures::future_to_promise(async move {
+                                ::worker::wasm_bindgen_futures::future_to_promise(async move {
                                     static_self._websocket_close_raw(ws.into(), code, reason, was_clean).await.map(|_| wasm_bindgen::JsValue::NULL)
                                         .map_err(wasm_bindgen::JsValue::from)
                                 })
@@ -206,7 +206,7 @@ pub fn expand_macro(tokens: TokenStream) -> syn::Result<TokenStream> {
                                 // to the durable object escape into a static-lifetime future.
                                 let static_self: &'static mut Self = unsafe {&mut *(self as *mut _)};
 
-                                wasm_bindgen_futures::future_to_promise(async move {
+                                ::worker::wasm_bindgen_futures::future_to_promise(async move {
                                     static_self._websocket_error_raw(ws.into(), error.into()).await.map(|_| wasm_bindgen::JsValue::NULL)
                                         .map_err(wasm_bindgen::JsValue::from)
                                 })
@@ -250,7 +250,7 @@ pub fn expand_macro(tokens: TokenStream) -> syn::Result<TokenStream> {
                     #(#tokenized)*
                 }
 
-                #pound[async_trait::async_trait(?Send)]
+                #pound[::worker::async_trait::async_trait(?Send)]
                 impl ::worker::durable::DurableObject for #struct_name {
                     fn new(state: ::worker::durable::State, env: ::worker::Env) -> Self {
                         Self::_new(state._inner(), env)
