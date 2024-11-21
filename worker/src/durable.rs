@@ -30,7 +30,7 @@ use wasm_bindgen::{prelude::*, JsCast};
 use worker_sys::{
     DurableObject as EdgeDurableObject, DurableObjectId,
     DurableObjectNamespace as EdgeObjectNamespace, DurableObjectState, DurableObjectStorage,
-    DurableObjectTransaction,
+    DurableObjectStorageSql, DurableObjectTransaction, SqlStorageCursor,
 };
 // use wasm_bindgen_futures::future_to_promise;
 use wasm_bindgen_futures::{future_to_promise, JsFuture};
@@ -500,6 +500,24 @@ impl Storage {
             .await
             .map_err(Error::from)
             .map(|_| ())
+    }
+
+    #[inline]
+    pub fn sql(&self) -> Sql {
+        Sql(self.inner.sql())
+    }
+}
+
+pub struct Sql(DurableObjectStorageSql);
+
+impl Sql {
+    pub fn database_size(&self) -> Result<u32> {
+        self.0.database_size().map_err(Error::from)
+    }
+
+    pub fn exec(&self, query: &str, bindings: &[JsValue]) -> Result<SqlStorageCursor> {
+        let bindings = bindings.iter().collect();
+        self.0.exec(query, bindings).map_err(Error::from)
     }
 }
 
