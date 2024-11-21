@@ -293,6 +293,10 @@ impl Storage {
             .map_err(Error::from)
     }
 
+    pub fn _inner(&self) -> &DurableObjectStorage {
+        &self.inner
+    }
+
     /// Retrieves the values associated with each of the provided keys.
     pub async fn get_multiple(&self, keys: Vec<impl Deref<Target = str>>) -> Result<Map> {
         let keys = self.inner.get_multiple(
